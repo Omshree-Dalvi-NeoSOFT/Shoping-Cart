@@ -7,11 +7,15 @@ use App\Models\Banner;
 use App\Models\Category;
 use App\Models\CMS;
 use App\Models\ContactUs;
+use App\Models\Order;
+use App\Models\OrderDetails;
 use App\Models\Product;
 use App\Models\ProductAttributesAssoc;
 use App\Models\ProductImage;
 use App\Models\SubCategory;
 use App\Models\User;
+use App\Models\UserDetails;
+use App\Models\WishList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -192,6 +196,67 @@ class UserController extends Controller
     public function CMSDetails(){
         $data = CMS::all();
         return response(['services'=>UserApiResource::collection($data)]);
+    }
+
+    public function Checkout(Request $req){
+        $uemail = $req->uemail;
+        $user = User::where('email',$uemail)->first();
+
+        $userdetails = new UserDetails();
+        $userdetails->user_id = $user->id;
+        $userdetails->email = $req->email;
+        $userdetails->firstname = $req->firstname;
+        $userdetails->middlename = $req->middlename;
+        $userdetails->lastname = $req->lastname;
+        $userdetails->address1 = $req->address1;
+        $userdetails->address2 = $req->address2;
+        $userdetails->zip = $req->zip;
+        $userdetails->phone = $req->phone;
+        $userdetails->mobilephone =$req->mobilephone;
+        $userdetails->shipping = $req->shipping;
+        $userdetails->save();
+
+        $userdetail = UserDetails::latest()->first();
+
+        $orders = $req->cart;
+        foreach($orders as $ord){
+            $order = new Order();
+            $order->userdetail_id = $userdetail->id;
+            $order->product_id = $ord['product_id'];
+            $order->save();
+        }
+
+        $orderdetail = new OrderDetails();
+        $orderdetail->userdetail_id = $userdetail->id;
+        $orderdetail->grandtotal = $req->grandtotal;
+        $orderdetail->finalTotal = $req->finalTotal;
+        $orderdetail->coupon_id =$req->coupon;
+        $orderdetail->save();
+
+        return response()->json(['msg'=>"Order Placed Successfully !"]);
+    }
+
+    public function AddWish(Request $req){
+        $user = User::where('email',$req->email)->first();
+        $wish = new WishList();
+        $wish->user_id = $user->id;
+        $wish->product_id = $req->pid;
+        $wish->save();
+        return response()->json(['msg'=>"Product Added to Wish List !"]);
+    }
+
+    public function GetWish($id){
+        $wish = WishList::where('user_id',$id)->get();
+        foreach($wish as $w){
+            $prod = Product::where('id',$w['product_id'])->first();
+            $product[] = $prod;
+        }
+        return response(['wish'=>UserApiResource::collection($product)]);
+    }
+
+    public function DelWish($id){
+        WishList::where('product_id',$id)->delete();
+        return response()->json(["msg"=>"Wish Deleted !!"]);
     }
 
     protected function respondWithToken($token){
