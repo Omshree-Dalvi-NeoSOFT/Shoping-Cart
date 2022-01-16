@@ -41,5 +41,6 @@ Route::group(['middleware'=>'api'],function($router){
     Route::post('/addwish',[UserController::class,'AddWish']);
     Route::get('/getwish/{id}',[UserController::class,'GetWish']);
     Route::get('/delwish/{id}',[UserController::class,'DelWish']);
-
+    Route::get('/coupons',[UserController::class,'Coupons']);
+    Route::get('/myorders/{id}',[UserController::class,'MyOrder']);
 });

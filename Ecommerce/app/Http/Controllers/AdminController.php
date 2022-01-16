@@ -68,27 +68,16 @@ class AdminController extends Controller
     }
 
     public function postEditUser(Request $req){
-        $validateData = $req->validate([
-            'firstname' => ['required', 'string', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'password_confirmation' => ['required'],
-            'role_id' => ['required'],
-            'status' => ['required']
-        ]);
-        try{
-            if($validateData){
-                User::where('id',$req->id)->update([
-                    'firstname' => $req->firstname,
-                    'lastname' => $req->lastname,
-                    'email' => $req->email,
-                    'password' => Hash::make($req->password),
-                    'role_id' => $req->role_id,
-                    'status' => $req->status
-                ]);
-                return back()->with('success','User Updated Successfully !!');
-            }
+        try{         
+            User::where('id',$req->id)->update([
+                'firstname' => $req->firstname,
+                'lastname' => $req->lastname,
+                'email' => $req->email,
+                'password' => Hash::make($req->password),
+                'role_id' => $req->role_id,
+                'status' => $req->status
+            ]);
+            return back()->with('success','User Updated Successfully !!');
         }catch(\Illuminate\Database\QueryException $e){
             return view('users.duplicateuser');
         }

@@ -40,10 +40,10 @@
                                @else 
                                 <h3><span class="badge badge-warning">In Active</span></h3>
                                 @endif </td>
-                                <td><a href="edituser/{{ $user->id }}" class="btn btn-info btn-sm" role="button">Edit</a> | <a type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" aid="{{$user->id}}">
+                                <td><a href="edituser/{{ $user->id }}" class="btn btn-info btn-sm" role="button">Edit</a> | <a type="button" class="btn btn-danger btn-sm dtlpro" data-bs-toggle="modal" data-bs-target="#staticBackdrop" aid="{{$user->id}}">
                                     Delete</a>
                                 <!-- Modal -->
-                                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <!-- <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                         <div class="modal-header">
@@ -59,7 +59,7 @@
                                         </div>
                                         </div>
                                     </div>
-                                    </div>
+                                    </div> -->
                                 </td>
                             </tr>
                         @endforeach
@@ -76,7 +76,7 @@
         $(document).ready(function(){
             $(".dtlpro").click(function(e){
                 var aid = $(this).attr("aid");
-                if(confirm){
+                if(confirm('Do you want to delete ?')){
                     $.ajax({
                         url:"{{url('/deleteuser')}}",
                         type:'post',

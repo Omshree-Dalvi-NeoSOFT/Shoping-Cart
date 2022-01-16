@@ -5,8 +5,12 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CMSController;
 use App\Http\Controllers\ContactUsController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SubCategoryController;
+use App\Models\Coupon;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Auth;
@@ -84,3 +88,16 @@ Route::get('/displaycms',[CMSController::class,'DisplayCMS'])->name('DisplayCMS'
 Route::patch('/deletecms',[CMSController::class,'DeleteCMS'])->name('DeleteCMS');
 Route::get('/editcms/{id}',[CMSController::class,'EditCMS'])->name('EditCMS');
 Route::post('/updatecms',[CMSController::class,'PostEditCMS'])->name('UpdateCMS');
+
+// Coupon Management
+
+Route::get('/addcoupon',[CouponController::class,'AddCoupon'])->name('AddCoupon');
+Route::post('/addpostcoupon',[CouponController::class,'AddPostCoupon'])->name('PostAddCoupon');
+Route::get('/showcoupons',[CouponController::class,'ShowCoupons'])->name('ShowCoupons');
+Route::patch('/deletecoupon',[CouponController::class,'DeleteCoupon'])->name('DeleteCoupon');
+Route::get('/editcoupon/{id}',[CouponController::class,'EditCoupon'])->name('EditCoupon');
+Route::post('/updatecoupon',[CouponController::class,'EditPostCoupon'])->name('UpdateCoupon');
+
+// Order 
+Route::get('/order',[OrderController::class,'Orders'])->name('Orders');
+Route::get('/displayorder/{id}',[OrderController::class,'OrdersDetail'])->name('OrdersDetail');

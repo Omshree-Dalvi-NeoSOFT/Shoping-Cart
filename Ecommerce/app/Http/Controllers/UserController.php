@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserApiResource;
+use App\Mail\OrderMail;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Models\CMS;
 use App\Models\ContactUs;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetails;
 use App\Models\Product;
@@ -18,7 +20,9 @@ use App\Models\UserDetails;
 use App\Models\WishList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\RegisterMail;
 
 class UserController extends Controller
 {
@@ -54,27 +58,18 @@ class UserController extends Controller
     }
 
     public function registerUser(Request $request){
-        $validator=Validator::make($request->all(),[
-            'ufname' => 'required', 'string', 'max:255',
-            'ulname' => 'required', 'string', 'max:255',
-            'uemail' => 'required', 'string', 'unique:users',
-            'upassword' => 'required', 'string', 'min:8', 'confirmed',
-            'ucpassword' => 'required'
+        
+        User::create([
+            'firstname' => $request->ufname,
+            'lastname' => $request->ulname,
+            'email' => $request->uemail,
+            'password' => Hash::make($request->cpassword),
+            'role_id' =>'5',
+            'status' => '1'
         ]);
-        if($validator->fails()){
-            return response()->json($validator->errors());
-        }
-        else{
-            User::create([
-                'firstname' => $request->ufname,
-                'lastname' => $request->ulname,
-                'email' => $request->uemail,
-                'password' => Hash::make($request->cpassword),
-                'role_id' =>'5',
-                'status' => '1'
-            ]);
-            return response()->json(['msg'=>"User Registered Successfully !"]);
-        }
+        Mail::to($request->uemail)->send(new RegisterMail($request->all()));
+        return response()->json(['msg'=>"User Registered Successfully !"]);
+        
     }
 
     public function contactUs(Request $request){
@@ -158,9 +153,9 @@ class UserController extends Controller
                 'updatedprofile'=>$user
             ]);
          //return response()->json(['status'=>1,'updatedprofile'=>$user]);
-     }
+    }
 
-     public function ChangePassword(Request $request){
+    public function ChangePassword(Request $request){
         $validator=Validator::make($request->all(),[
             'old_password'=>'required|min:6|max:12',
             'new_password'=>'required|min:6|max:12',
@@ -217,7 +212,7 @@ class UserController extends Controller
         $userdetails->save();
 
         $userdetail = UserDetails::latest()->first();
-
+        
         $orders = $req->cart;
         foreach($orders as $ord){
             $order = new Order();
@@ -230,9 +225,15 @@ class UserController extends Controller
         $orderdetail->userdetail_id = $userdetail->id;
         $orderdetail->grandtotal = $req->grandtotal;
         $orderdetail->finalTotal = $req->finalTotal;
-        $orderdetail->coupon_id =$req->coupon;
+        // $orderdetail->coupon_id =$req->coupon;
+        if($req->coupon){
+            $coupon = $req->coupon;
+        foreach($coupon as $c){
+            $orderdetail->coupon_id =$c['id'];
+        }
+        }
         $orderdetail->save();
-
+        Mail::to($uemail)->send(new OrderMail($req->all()));
         return response()->json(['msg'=>"Order Placed Successfully !"]);
     }
 
@@ -257,6 +258,19 @@ class UserController extends Controller
     public function DelWish($id){
         WishList::where('product_id',$id)->delete();
         return response()->json(["msg"=>"Wish Deleted !!"]);
+    }
+
+    public function Coupons(){
+        $coupon = Coupon::where('couponstatus',1)->get();
+        return response(['coupons'=>UserApiResource::collection($coupon)]);
+    }
+
+    public function MyOrder($id){
+        $userdetail = UserDetails::where('user_id',$id)->get();
+        $orderdetail = OrderDetails::all();
+        $orders = Order::all();
+        $orderdetails = ["userdetail"=>$userdetail,"orderdetail"=>$orderdetail,"orders"=>$orders];
+        return response()->json($orderdetails);
     }
 
     protected function respondWithToken($token){

@@ -25,7 +25,7 @@ class ProductController extends Controller
             'prodcolour' => ['required'],
             'prodquant' => ['required','integer'],
             'prodprics' => ['required' , 'numeric'],
-            'proddescription' => ['max:300'],
+            'proddescription' => ['max:1000'],
             'imgmain' => ['required']
         ]);
         if($validate){
@@ -129,7 +129,7 @@ class ProductController extends Controller
             'prodcolour' => ['required'],
             'prodquant' => ['required','integer'],
             'prodprics' => ['required' , 'numeric'],
-            'proddescription' => ['max:300'],
+            'proddescription' => ['max:1000'],
             
         ]);
         if($validate){

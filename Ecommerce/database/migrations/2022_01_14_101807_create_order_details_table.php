@@ -16,7 +16,6 @@ class CreateOrderDetailsTable extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('userdetail_id');
-            $table->unsignedBigInteger('order_id');
             $table->unsignedDecimal('grandtotal');
             $table->unsignedDecimal('finalTotal');
             $table->unsignedBigInteger('coupon_id')->nullable();

@@ -16,7 +16,7 @@ class CreateCMSTable extends Migration
         Schema::create('c_m_s', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description')->nullable();
+            $table->string('description',1000)->nullable();
             $table->string('image');
             $table->timestamps();
         });

@@ -254,6 +254,8 @@
             </ul>
 
           </li>
+
+          <!-- Coupon Management -->
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
@@ -264,27 +266,22 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{route('AddCoupon')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Simple Tables</p>
+                  <p>Add Coupon</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{route('ShowCoupons')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>DataTables</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>jsGrid</p>
+                  <p>Modify Coupon</p>
                 </a>
               </li>
             </ul>
           </li>
 
           <li class="nav-header">Process Managements</li>
+          
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon far fa-envelope"></i>
@@ -342,14 +339,14 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Invoice</p>
                 </a>
-              </li>
+              </li> -->
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{route('Orders')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Order Details</p>
                 </a>
