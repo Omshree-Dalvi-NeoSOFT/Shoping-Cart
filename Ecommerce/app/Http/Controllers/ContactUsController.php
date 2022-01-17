@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class ContactUsController extends Controller
 {
+    // display contact page
     public function ContactUs(){
         try{
             $contacts = ContactUs::paginate(5)->all();

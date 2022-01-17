@@ -13,11 +13,13 @@ use function PHPUnit\Framework\once;
 
 class ProductController extends Controller
 {
+    // add product page
     public function AddProduct(){
         $subcategories = SubCategory::all();
         return view('product.addproduct',compact('subcategories'));
     }
 
+    // add product
     public function PostAddProduct(Request $req){
         $validate = $req->validate([
             'prodname' => ['required' , 'string' , 'max:100'],
@@ -74,12 +76,14 @@ class ProductController extends Controller
         }
     }
 
+    // display all products
     public function ShowProduct(){
         $products = Product::all();
         $prodsubcat = SubCategory::all();
         return view('product.showproduct',compact('products','prodsubcat'));
     }
 
+    // display detail product
     public function DisplayProduct($id){
         try{
             $product = Product::where('id',$id)->firstorFail();
@@ -95,17 +99,24 @@ class ProductController extends Controller
         
     }
 
+    // edit product
     public function EditProduct($id){
-        $product = Product::where('id',$id)->firstorFail();
-        $productImages = ProductImage::where('product_id',$product->id)->get();
-        $productAssocs = ProductAttributesAssoc::where('product_id',$product->id)->get();
-        $subcat = SubCategory::where('id',$product->subcat_id)->firstorFail();
-        $catid = Category::where('id',$subcat->category_id)->firstorFail();
-        $subcategories = SubCategory::all()->except($product->subcat_id);
+        try{
+            $product = Product::where('id',$id)->firstorFail();
+            $productImages = ProductImage::where('product_id',$product->id)->get();
+            $productAssocs = ProductAttributesAssoc::where('product_id',$product->id)->get();
+            $subcat = SubCategory::where('id',$product->subcat_id)->firstorFail();
+            $catid = Category::where('id',$subcat->category_id)->firstorFail();
+            $subcategories = SubCategory::all()->except($product->subcat_id);
 
-        return view('product.editproduct',compact('product','productImages','productAssocs','subcat','catid','subcategories'));
+            return view('product.editproduct',compact('product','productImages','productAssocs','subcat','catid','subcategories'));
+        }catch(\Exception $e){
+            return view('layouts.pagenotfound');
+        }
+        
     }
 
+    // delete product image
     public function DeleteProductImage(Request $req){
         try{
             ProductImage::where('id',$req->aid)->delete();
@@ -114,6 +125,7 @@ class ProductController extends Controller
         }
     }
 
+    // delete product attributes
     public function DeleteProductAttr(Request $req){
         try{
             ProductAttributesAssoc::where('id',$req->atrid)->delete();
@@ -122,6 +134,7 @@ class ProductController extends Controller
         }
     }
 
+    // update product
     public function UpdateProduct(Request $req){
         $validate = $req->validate([
             'prodname' => ['required' , 'string' , 'max:100'],
@@ -180,6 +193,7 @@ class ProductController extends Controller
         return back();
     }
 
+    // delete product
     public function DeleteProduct(Request $req){
         try{
             Product::where('id',$req->aid)->delete();

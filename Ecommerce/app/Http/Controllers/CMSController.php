@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\File;
 
 class CMSController extends Controller
 {
+    // add cms page
     public function AddCMS(){
         return view('cms.addcms');
     }
-    
+  
+    // add cms page
     public function PostAddCMS(Request $req){
         $validateData = $req->validate([
             'heading' => ['required', 'string', 'max:255'],
@@ -40,11 +42,13 @@ class CMSController extends Controller
         }
     }
 
+    // display cms
     public function DisplayCMS(){
         $cms = CMS::all();
         return view('cms.displaycms',compact('cms'));
     }
 
+    // delete cms
     public function DeleteCMS(Request $req){
         try{
             $cms=CMS::where('id',$req->aid)->firstorFail();
@@ -60,6 +64,7 @@ class CMSController extends Controller
         return back();
     }
 
+    // edit cms
     public function EditCMS($id){
         try{
             $cms = CMS::where('id',$id)->firstorFail();
@@ -69,6 +74,7 @@ class CMSController extends Controller
         } 
     }
 
+    // update cms
     public function PostEditCMS(Request $req){
         $validateData = $req->validate([
             'heading' => ['required', 'string', 'max:255'],

@@ -8,12 +8,14 @@ use Illuminate\Support\Facades\File;
 use SebastianBergmann\Environment\Console;
 
 class BannerController extends Controller
-{
+{   
+    // show banner page
     public function AddBanner()
     {
         return view('banner.addbanner');
     }
 
+    // add banner
     public function PostAddBanner(Request $req)
     {
         $validateData = $req->validate([
@@ -56,6 +58,7 @@ class BannerController extends Controller
         }
     }
 
+    // show banner
     public function ShowBanners()
     {
         try {
@@ -66,6 +69,7 @@ class BannerController extends Controller
         return view('banner.showbanner', compact('banners'));
     }
 
+    // edit banner page
     public function EditBanner($id)
     {
         try {
@@ -76,6 +80,7 @@ class BannerController extends Controller
         return view('banner.editbanner', compact('banner'));
     }
 
+    // update banner
     public function PostUpdateBanner(Request $req)
     {
         $validateData = $req->validate([
@@ -121,6 +126,7 @@ class BannerController extends Controller
         return redirect('/displaycms')->with('status',"Updates Successfully !");
     }
 
+    // delete banner
     public function DeleteBanner(Request $req){
         try{
             $banner=Banner::where('id',$req->aid)->firstorFail();

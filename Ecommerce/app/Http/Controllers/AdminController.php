@@ -11,11 +11,13 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 { 
+    // Add user page
     public function AddUser(){
         $roles = Role::all();
         return view('users.adduser',compact('roles'));
     }
 
+    // show users
     public function showUser(){
         try{
             $users = User::paginate(5)->except(Auth::id());
@@ -28,6 +30,7 @@ class AdminController extends Controller
         return view('users.showuser',compact('users','roles'));
     }
 
+    // add user
     public function PostAddUser(Request $req){
         $validateData =$req->validate([
             'firstname' => ['required', 'string', 'max:255'],
@@ -55,6 +58,7 @@ class AdminController extends Controller
         }
     }
 
+    // display edit user 
     public function EditUser($id){
         try{
             $user = User::where('id',$id)->firstorFail();
@@ -67,6 +71,7 @@ class AdminController extends Controller
         return view('users.edituser',compact('user','userrole','roles'));
     }
 
+    // update user (edited)
     public function postEditUser(Request $req){
         try{         
             User::where('id',$req->id)->update([
@@ -83,6 +88,7 @@ class AdminController extends Controller
         }
     }
 
+    // delete user
     public function DeleteUser(Request $req){
         User::where('id',$req->aid)->delete();
         return back();

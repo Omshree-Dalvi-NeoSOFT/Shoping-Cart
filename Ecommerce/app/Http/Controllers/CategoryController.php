@@ -7,10 +7,12 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    // add category page
     public function AddCategory(){
         return view('category.addcategory');
     }
 
+    // add category
     public function PostAddCategory(Request $req){
         $validate = $req->validate([
             'catname' => ['required','string', 'max:255'],
@@ -34,6 +36,7 @@ class CategoryController extends Controller
         }
     }
 
+    // display category
     public function ShowCategory(){
         try{
             $category = Category::paginate(5)->all();
@@ -43,6 +46,7 @@ class CategoryController extends Controller
         }
     }
 
+    // show category detail edit page
     public function EditCategory($id){
         try {
             $category = Category::where('id', $id)->firstorFail();
@@ -53,6 +57,7 @@ class CategoryController extends Controller
         
     }
 
+    // update category
     public function UpdateCategory(Request $req){
         $validate = $req->validate([
             'catname' => ['required','string', 'max:255'],
@@ -75,6 +80,7 @@ class CategoryController extends Controller
         }
     }
 
+    // delete category
     public function DeleteCategory(Request $req){
         try{
             Category::where('id',$req->aid)->delete();

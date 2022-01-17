@@ -133,33 +133,6 @@
               </li>
             </ul>
           </li>
-          
-          <!-- Configuration Management -->
-
-          <li class="nav-item ">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>
-                Configuration Management
-                <i class="fas fa-angle-left right"></i>
-                <span class="badge badge-info right">2</span>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Top Navigation</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Collapsed Sidebar</p>
-                </a>
-              </li>
-            </ul>
-          </li>
 
           <!-- Banner Management -->
 
@@ -281,37 +254,8 @@
           </li>
 
           <li class="nav-header">Process Managements</li>
-          
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon far fa-envelope"></i>
-              <p>
-                Emails
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Inbox</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Compose</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Read</p>
-                </a>
-              </li>
-            </ul>
-          </li>
 
+          <!-- contact Notification -->
           <li class="nav-item">
             <a href="{{route('ContactUs')}}" class="nav-link">
               <i class="nav-icon far fa-image"></i>
@@ -320,7 +264,8 @@
               </p>
             </a>
           </li>
-
+          
+          <!-- CMS -->
           <li class="nav-item">
             <a href="{{route('AddCMS')}}" class="nav-link">
               <i class="nav-icon fas fa-columns"></i>
@@ -330,6 +275,7 @@
             </a>
           </li>
           
+          <!-- Order Management -->
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-book"></i>
@@ -354,7 +300,7 @@
             </ul>
           </li>
 
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon far fa-plus-square"></i>
               <p>
@@ -442,7 +388,7 @@
                 </a>
               </li>
             </ul>
-          </li>
+          </li> -->
           <hr>
         </ul>
       </nav>

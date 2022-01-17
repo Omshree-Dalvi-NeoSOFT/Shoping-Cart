@@ -26,15 +26,18 @@ use App\Mail\RegisterMail;
 
 class UserController extends Controller
 {
+    // api constructor 
     public function __constract(){
         $this->middleware('auth:api',['except'=>['login','register']]);
     }
 
+    // display all users
     public function Index(){
         $data = User::all();
         return response()->json($data);
     }
 
+    // login user
     public function login(Request $request){
         $validator=Validator::make($request->all(),[
             'email'=>'required',
@@ -57,21 +60,30 @@ class UserController extends Controller
         }
     }
 
+    // register user
     public function registerUser(Request $request){
-        
-        User::create([
-            'firstname' => $request->ufname,
-            'lastname' => $request->ulname,
-            'email' => $request->uemail,
-            'password' => Hash::make($request->cpassword),
-            'role_id' =>'5',
-            'status' => '1'
-        ]);
+        $user = new User();
+        $user->firstname = $request->ufname;
+        $user->lastname = $request->ulname;
+        $user->email = $request->uemail;
+        $user->password = Hash::make($request->cpassword);
+        $user->role_id = 5;
+        $user->status = 1;
+        $user->save();
+        // User::create([
+        //     'firstname' => $request->ufname,
+        //     'lastname' => $request->ulname,
+        //     'email' => $request->uemail,
+        //     'password' => Hash::make($request->cpassword),
+        //     'role_id' =>'5',
+        //     'status' => '1'
+        // ]);
         Mail::to($request->uemail)->send(new RegisterMail($request->all()));
-        return response()->json(['msg'=>"User Registered Successfully !"]);
+        return response()->json(['msg'=>"User Registered Successfully !",'user'=>$user]);
         
     }
 
+    // fetch contact us 
     public function contactUs(Request $request){
         $validator=Validator::make($request->all(),[
             'name'=>'required',
@@ -93,6 +105,7 @@ class UserController extends Controller
         }
     }
 
+    // display productdetails
     public function ProductDetails(){
         $product = Product::all();
         $productImage = ProductImage::all();
@@ -101,26 +114,31 @@ class UserController extends Controller
         return response()->json($proddetails);
     }
 
+    // fetch product images
     public function ProductImages(){
         $productImage = ProductImage::all();
         return response(['image'=>UserApiResource::collection($productImage)]);
     }
 
+    // get bnner details
     public function BannerDetails(){
         $banner = Banner::all();
         return response(['banner'=>UserApiResource::collection($banner)]);
     }
 
+    // get all category 
     public function Category(){
         $category = Category::all();
         return response(['category'=>UserApiResource::collection($category)]);
     }
 
+    // get all sub category
     public function SubCategory(){
         $subcategory = SubCategory::all();
         return response(['subcategory'=>UserApiResource::collection($subcategory)]);
     }
 
+    // get all products, subcategory wise
     public function SubCategoryProducts($id){
         $product = Product::where('subcat_id',$id)->get();
         $productImage = ProductImage::all();
@@ -130,18 +148,21 @@ class UserController extends Controller
         return response()->json($proddetails);
     }
 
+    // get current product details
     public function CurrentProductsDetails($id){
         $product = Product::with('Images','ProdAttr')->find($id);
         return response()->json($product);
 
     }
 
+    // get user profile details
     public function Profile($user){
         $profile=User::where('email',$user)->first();
         return response()->json(['profile'=>$profile]);
 
     }
 
+    // update user profile
     public function UpdateProfile(Request $request){
             $user=User::where('id',$request->id)->update([
                 'firstname' => $request->first_name,
@@ -155,6 +176,7 @@ class UserController extends Controller
          //return response()->json(['status'=>1,'updatedprofile'=>$user]);
     }
 
+    // change user password
     public function ChangePassword(Request $request){
         $validator=Validator::make($request->all(),[
             'old_password'=>'required|min:6|max:12',
@@ -188,11 +210,13 @@ class UserController extends Controller
         ]);
     }
 
+    // display cms details
     public function CMSDetails(){
         $data = CMS::all();
         return response(['services'=>UserApiResource::collection($data)]);
     }
 
+    // fetch checkout data
     public function Checkout(Request $req){
         $uemail = $req->uemail;
         $user = User::where('email',$uemail)->first();
@@ -237,6 +261,7 @@ class UserController extends Controller
         return response()->json(['msg'=>"Order Placed Successfully !"]);
     }
 
+    // add wish list
     public function AddWish(Request $req){
         $user = User::where('email',$req->email)->first();
         $wish = new WishList();
@@ -246,6 +271,7 @@ class UserController extends Controller
         return response()->json(['msg'=>"Product Added to Wish List !"]);
     }
 
+    // get user wish list
     public function GetWish($id){
         $wish = WishList::where('user_id',$id)->get();
         foreach($wish as $w){
@@ -255,16 +281,19 @@ class UserController extends Controller
         return response(['wish'=>UserApiResource::collection($product)]);
     }
 
+    // delete user wishlist 
     public function DelWish($id){
         WishList::where('product_id',$id)->delete();
         return response()->json(["msg"=>"Wish Deleted !!"]);
     }
 
+    // display coupons
     public function Coupons(){
         $coupon = Coupon::where('couponstatus',1)->get();
         return response(['coupons'=>UserApiResource::collection($coupon)]);
     }
 
+    // fetch user orders
     public function MyOrder($id){
         $userdetail = UserDetails::where('user_id',$id)->get();
         $orderdetail = OrderDetails::all();
@@ -273,6 +302,7 @@ class UserController extends Controller
         return response()->json($orderdetails);
     }
 
+    // generate JWT Token
     protected function respondWithToken($token){
         return response()->json([
             'access_token'=>$token,

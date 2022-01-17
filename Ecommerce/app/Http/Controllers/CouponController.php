@@ -7,13 +7,18 @@ use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
+    // display coupon
     public function ShowCoupons(){
         $coupons=Coupon::all();
         return view('coupon.showcoupon',compact('coupons'));
     }
+
+    // add coupon page
     public function AddCoupon(){
         return view('coupon.addcoupon');
     }
+
+    // add coupon
     public function AddPostCoupon(Request $req){
         $validate=$req->validate([
             'code'=>'required|unique:coupons',
@@ -33,10 +38,19 @@ class CouponController extends Controller
                 return back()->withSuccess('Coupon added successfully');            }
         }
     }
+
+    // edit coupon
     public function EditCoupon($id){
-        $coupon=Coupon::find($id);
-        return view('coupon.editcoupon',compact('coupon'));
+        try{
+            $coupon=Coupon::find($id);
+            return view('coupon.editcoupon',compact('coupon'));
+        }catch(\Exception $e){
+            return view('layouts.pagenotfound');
+        }
+        
     }
+
+    // edit coupon
     public function EditPostCoupon(Request $req){
         $validate=$req->validate([
             'code'=>'required',
@@ -57,6 +71,8 @@ class CouponController extends Controller
             }
         }
     }
+
+    // delete coupon
     public function DeleteCoupon(Request $req){
         $coupon=Coupon::find($req->cid);
         if($coupon->delete()){

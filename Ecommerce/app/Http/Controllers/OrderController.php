@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    // display all orders
     public function Orders(){
         $orders = Order::all();
         $userdetails = UserDetails::all();
@@ -20,6 +21,7 @@ class OrderController extends Controller
         return view('order.vieworder',compact('orders','userdetails','orderdetails','coupons'));
     }
 
+    // display order in detail
     public function OrdersDetail($id){
         $userdetails = UserDetails::where('id',$id)->first();
         $orderdetails = OrderDetails::where('userdetail_id',$id)->first();

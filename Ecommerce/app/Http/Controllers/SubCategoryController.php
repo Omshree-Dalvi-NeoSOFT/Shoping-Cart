@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class SubCategoryController extends Controller
 {
+    // add sub category page
     public function AddSubCategory(){
         try{
             $categories=Category::all();
@@ -17,6 +18,7 @@ class SubCategoryController extends Controller
         }
     }
 
+    // add sub category
     public function PostAddSubCategory(Request $req){
         $validation = $req->validate([
             'subcatname' => ['required', 'string'],
@@ -42,6 +44,7 @@ class SubCategoryController extends Controller
         }
     }
 
+    // display subcategory
     public function ShowSubCategory(){
         try{
             $subcats = SubCategory::all();
@@ -52,6 +55,7 @@ class SubCategoryController extends Controller
         }
     }
 
+    // edit subcategory page
     public function EditSubCategory($id){
         try{
             $subcat = SubCategory::where('id',$id)->firstorFail();
@@ -63,6 +67,7 @@ class SubCategoryController extends Controller
         }
     }
 
+    // update subcategory
     public function PostEditSubCategory(Request $req){
         $validation = $req->validate([
             'subcatname' => ['required', 'string'],
@@ -89,6 +94,7 @@ class SubCategoryController extends Controller
         }
     }
 
+    // delete subcategory
     public function DeleteSubCategory(Request $req){
         try{
             SubCategory::where('id',$req->aid)->delete();
