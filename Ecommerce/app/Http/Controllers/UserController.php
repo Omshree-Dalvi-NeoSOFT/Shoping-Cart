@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserApiResource;
+use App\Mail\AdminRegister;
 use App\Mail\OrderMail;
 use App\Models\Banner;
 use App\Models\Category;
@@ -79,6 +80,7 @@ class UserController extends Controller
         //     'status' => '1'
         // ]);
         Mail::to($request->uemail)->send(new RegisterMail($request->all()));
+        Mail::to('omshreedalvi31@gmail.com')->send(new AdminRegister($request->all()));
         return response()->json(['msg'=>"User Registered Successfully !",'user'=>$user]);
         
     }
