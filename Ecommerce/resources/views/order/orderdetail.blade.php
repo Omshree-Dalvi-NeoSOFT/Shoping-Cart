@@ -30,7 +30,37 @@
                             <th scope="col">Order Details</th>
                         </tr>
                     </thead> 
-                    <tbody>  
+                    <tbody>
+                        <tr>
+                            <th>#</th>
+                            <th class="text text-danger">Order Status</th>
+                            <td>
+                                
+                                <form action="{{route('UpdateStatus')}}" method="POST">
+                                    @csrf
+                                    <input type="hidden" value="{{$orderdetails->id}}" name="orderdtlid"/>
+                                    <input type="hidden" value="{{$userdetails->id}}" name="userdtlid"/>
+                                    <div class="row">
+                                    <div class="col-md-8">
+                                        <select class="form-control" id="category" name="status">
+                                            <!-- foreach render types  -->                               
+                                            <option value="{{$orderdetails->status}}" selected >{{$orderdetails->status}}</option>
+                                            @if ($orderdetails->status == "Pending")
+                                                <option value="Dispatched">Dispatched</option>
+                                            @else
+                                                <option value="Pending">Pending</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="submit" class="btn btn-info" value="Update Statu"/>
+                                    </div>
+                                    </div>
+                                    
+                                </form>
+                                
+                            </td>
+                        </tr> 
                         <tr>
                             <th>1</th>
                             <th>Customer Name</th>

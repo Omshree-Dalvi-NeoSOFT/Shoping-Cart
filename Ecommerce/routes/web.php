@@ -101,3 +101,4 @@ Route::post('/updatecoupon',[CouponController::class,'EditPostCoupon'])->name('U
 // Order 
 Route::get('/order',[OrderController::class,'Orders'])->name('Orders');
 Route::get('/displayorder/{id}',[OrderController::class,'OrdersDetail'])->name('OrdersDetail');
+Route::post('/updatestatus',[OrderController::class,'UpdateStatus'])->name('UpdateStatus');

@@ -19,6 +19,7 @@ class CreateOrderDetailsTable extends Migration
             $table->unsignedDecimal('grandtotal');
             $table->unsignedDecimal('finalTotal');
             $table->unsignedBigInteger('coupon_id')->nullable();
+            $table->string('status');
             $table->timestamps();
         });
     }

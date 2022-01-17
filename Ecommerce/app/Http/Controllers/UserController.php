@@ -63,25 +63,17 @@ class UserController extends Controller
 
     // register user
     public function registerUser(Request $request){
-        $user = new User();
-        $user->firstname = $request->ufname;
-        $user->lastname = $request->ulname;
-        $user->email = $request->uemail;
-        $user->password = Hash::make($request->cpassword);
-        $user->role_id = 5;
-        $user->status = 1;
-        $user->save();
-        // User::create([
-        //     'firstname' => $request->ufname,
-        //     'lastname' => $request->ulname,
-        //     'email' => $request->uemail,
-        //     'password' => Hash::make($request->cpassword),
-        //     'role_id' =>'5',
-        //     'status' => '1'
-        // ]);
-        Mail::to($request->uemail)->send(new RegisterMail($request->all()));
-        Mail::to('omshreedalvi31@gmail.com')->send(new AdminRegister($request->all()));
-        return response()->json(['msg'=>"User Registered Successfully !",'user'=>$user]);
+            User::create([
+                'firstname' => $request->ufname,
+                'lastname' => $request->ulname,
+                'email' => $request->uemail,
+                'password' => Hash::make($request->upassword),
+                'role_id' => 5,
+                'status' => 1
+            ]);
+            Mail::to($request->uemail)->send(new RegisterMail($request->all()));
+            Mail::to('omshreedalvi31@gmail.com')->send(new AdminRegister($request->all()));
+            return response()->json(['msg'=>"User Registered Successfully !"]);
         
     }
 
@@ -251,6 +243,7 @@ class UserController extends Controller
         $orderdetail->userdetail_id = $userdetail->id;
         $orderdetail->grandtotal = $req->grandtotal;
         $orderdetail->finalTotal = $req->finalTotal;
+        $orderdetail->status="Pending";
         // $orderdetail->coupon_id =$req->coupon;
         if($req->coupon){
             $coupon = $req->coupon;
