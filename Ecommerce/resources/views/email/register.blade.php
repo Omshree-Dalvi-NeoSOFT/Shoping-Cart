@@ -10,18 +10,18 @@
 <body class="container">
    <div class="container">
     <p>
-    The great thing about the Internet isn't that you can reconnect with old friends or stay up to date with developing world events or send pictures of newborns immediately around the world. It is simply that you can log on to jcpenney.com from anywhere and order fresh underwear immediately after seeing your life flash before your eyes.
+    The great thing about the Internet isn't that you can reconnect with old friends or stay up to date with developing world events or send pictures of newborns immediately around the world. It is simply that you can log on to shopingcart.com from anywhere and order fresh underwear immediately after seeing your life flash before your eyes.
     </p>
     <p>
-      <h3>Welcome</h3>
+      <h3>Welcome {{$fname}}</h3>
       <br>
       Following are the Login Credentials :
     </p>
    </div>
-    <table class="table">
+    <table class="table text-left" style="text-align: left;">
     <tr>
       <th><b>Name :</b></th>
-      <td>{{$name}}</td>
+      <td>{{$fname}} {{$lname}}</td>
     </tr>
     <tr>
     <th><b>Email :</b></th>
@@ -35,9 +35,14 @@
 </table>
 <div class="container">
   <p>
-    <h2>Thanks & Regards,</h2><br>
+    <h2>Thanks & Regards,</h2>
     <h5>Shopping Cart Team.</h5>
   </p>
+</div>
+<div class="container">
+  <p>
+    <h6>this is system generated mail..</h6><br>
+</p>
 </div>
 
 </body>

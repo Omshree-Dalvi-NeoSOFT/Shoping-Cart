@@ -9,12 +9,12 @@
 </head>
 <body class="container">
    <div class="container">
-   <h3> Order Mail</h3>
+   <h3>New Order Placed</h3>
     <p>
     The great thing about the Internet isn't that you can reconnect with old friends or stay up to date with developing world events or send pictures of newborns immediately around the world. It is simply that you can log on to Shoppingcart.com from anywhere and order fresh underwear immediately after seeing your life flash before your eyes.
     </p>
     <p>
-      <h3> {{$fname}}, Thank You !!</h3>
+      <h3>Order Placed By : {{$fname}}</h3>
       <br>
       Following are the Order Details :
     </p>

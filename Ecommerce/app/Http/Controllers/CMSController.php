@@ -10,13 +10,18 @@ use Illuminate\Support\Facades\File;
 
 class CMSController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     // add cms page
-    public function AddCMS(){
+    public function addCMS(){
         return view('cms.addcms');
     }
   
     // add cms page
-    public function PostAddCMS(Request $req){
+    public function postAddCMS(Request $req){
         $validateData = $req->validate([
             'heading' => ['required', 'string', 'max:255'],
             'cmsdescription' => ['max:1000'],
@@ -43,16 +48,17 @@ class CMSController extends Controller
     }
 
     // display cms
-    public function DisplayCMS(){
+    public function displayCMS(){
         $cms = CMS::all();
         return view('cms.displaycms',compact('cms'));
     }
 
     // delete cms
-    public function DeleteCMS(Request $req){
+    public function deleteCMS(Request $req){
         try{
-            $cms=CMS::where('id',$req->aid)->firstorFail();
-            $destination=public_path('images/cms/'.$cms->image);
+            $cms = CMS::where('id',$req->aid)->firstorFail();
+            $destination = public_path('images/cms/'.$cms->image);
+
             if(File::exists($destination)){
                 unlink($destination);
                 $cms->delete();
@@ -65,7 +71,7 @@ class CMSController extends Controller
     }
 
     // edit cms
-    public function EditCMS($id){
+    public function editCMS($id){
         try{
             $cms = CMS::where('id',$id)->firstorFail();
             return view('cms.editcms',compact('cms'));
@@ -75,7 +81,7 @@ class CMSController extends Controller
     }
 
     // update cms
-    public function PostEditCMS(Request $req){
+    public function postEditCMS(Request $req){
         $validateData = $req->validate([
             'heading' => ['required', 'string', 'max:255'],
             'cmsdescription' => ['string', 'max:1000'],
@@ -89,9 +95,11 @@ class CMSController extends Controller
                 $file = $req->file('cmsimage');
                 $fname = $file->getClientOriginalName();
                 $destination=public_path('images/cms/'.$banner->image);
+
                 if(File::exists($destination)){
                     unlink($destination);
-                } 
+                }
+                 
                 $filename = rand() . "-" . time() . "-" . $fname;
                 $des = public_path('/images/cms');
                 $file->move($des, $filename);

@@ -7,20 +7,25 @@ use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     // display coupon
-    public function ShowCoupons(){
-        $coupons=Coupon::all();
+    public function showCoupons(){
+        $coupons = Coupon::all();
         return view('coupon.showcoupon',compact('coupons'));
     }
 
     // add coupon page
-    public function AddCoupon(){
+    public function addCoupon(){
         return view('coupon.addcoupon');
     }
 
     // add coupon
-    public function AddPostCoupon(Request $req){
-        $validate=$req->validate([
+    public function addPostCoupon(Request $req){
+        $validate = $req->validate([
             'code'=>'required|unique:coupons',
             'type'=>'required',
             'value'=>'required|numeric',
@@ -28,7 +33,7 @@ class CouponController extends Controller
             'couponstatus' => 'required'
         ]);
         if($validate){
-            $coupon=new Coupon();
+            $coupon = new Coupon();
             $coupon->code=$req->code;
             $coupon->type=$req->type;
             $coupon->value=$req->value;
@@ -40,9 +45,9 @@ class CouponController extends Controller
     }
 
     // edit coupon
-    public function EditCoupon($id){
+    public function editCoupon($id){
         try{
-            $coupon=Coupon::find($id);
+            $coupon = Coupon::find($id);
             return view('coupon.editcoupon',compact('coupon'));
         }catch(\Exception $e){
             return view('layouts.pagenotfound');
@@ -51,8 +56,8 @@ class CouponController extends Controller
     }
 
     // edit coupon
-    public function EditPostCoupon(Request $req){
-        $validate=$req->validate([
+    public function editPostCoupon(Request $req){
+        $validate = $req->validate([
             'code'=>'required',
             'type'=>'required',
             'value'=>'required|numeric',
@@ -60,7 +65,7 @@ class CouponController extends Controller
             'couponstatus' =>'required'
         ]);
         if($validate){
-            $coupon=Coupon::find($req->id);
+            $coupon = Coupon::find($req->id);
             $coupon->code=$req->code;
             $coupon->type=$req->type;
             $coupon->value=$req->value;
@@ -73,8 +78,8 @@ class CouponController extends Controller
     }
 
     // delete coupon
-    public function DeleteCoupon(Request $req){
-        $coupon=Coupon::find($req->cid);
+    public function deleteCoupon(Request $req){
+        $coupon = Coupon::find($req->cid);
         if($coupon->delete()){
             return back()->withSuccess('Coupon deleted successfully');
         }

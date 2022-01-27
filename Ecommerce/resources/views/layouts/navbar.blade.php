@@ -389,6 +389,16 @@
               </li>
             </ul>
           </li> -->
+
+          <!-- Settings -->
+          <li class="nav-item">
+            <a href="{{route('userSettings')}}" class="nav-link">
+              <i class="nav-icon fas fa-user-cog"></i>
+              <p>
+                Settings
+              </p>
+            </a>
+          </li>
           <hr>
         </ul>
       </nav>

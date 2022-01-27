@@ -53,7 +53,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="submit" class="btn btn-info" value="Update Statu"/>
+                                        <input type="submit" class="btn btn-info" value="Update Status"/>
                                     </div>
                                     </div>
                                     

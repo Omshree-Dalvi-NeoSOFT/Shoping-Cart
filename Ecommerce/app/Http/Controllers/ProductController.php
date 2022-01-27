@@ -13,14 +13,19 @@ use function PHPUnit\Framework\once;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     // add product page
-    public function AddProduct(){
+    public function addProduct(){
         $subcategories = SubCategory::all();
         return view('product.addproduct',compact('subcategories'));
     }
 
     // add product
-    public function PostAddProduct(Request $req){
+    public function postaddProduct(Request $req){
         $validate = $req->validate([
             'prodname' => ['required' , 'string' , 'max:100'],
             'subcat' => ['required'],
@@ -38,10 +43,11 @@ class ProductController extends Controller
             $product->colour = $req->prodcolour;
             $product->quantity = $req->prodquant;
             $product->price = $req->prodprics;
-            $file=$req->file('imgmain');
-            $fname=$file->getClientOriginalName();
-            $filename=rand() . "-" . time() . "-" . $fname;
-            $dest=public_path("/images/product");
+            $file = $req->file('imgmain');
+            $fname = $file->getClientOriginalName();
+            $filename = rand() . "-" . time() . "-" . $fname;
+            $dest = public_path("/images/product");
+
             if($file->move($dest,$filename)){
                 $product->prod_mainimage = $filename;
                 $product->save();
@@ -53,7 +59,7 @@ class ProductController extends Controller
                     $prodassoc = new ProductAttributesAssoc();
                     $prodassoc->attr_name = $n['name'];
                     $prodassoc->arrt_value = $n['value'];
-                    $productid->ProdAttr()->save($prodassoc);
+                    $productid->prodAttr()->save($prodassoc);
                 }
             }
             if($files=$req->file('img')){
@@ -77,14 +83,14 @@ class ProductController extends Controller
     }
 
     // display all products
-    public function ShowProduct(){
+    public function showProduct(){
         $products = Product::all();
         $prodsubcat = SubCategory::all();
         return view('product.showproduct',compact('products','prodsubcat'));
     }
 
     // display detail product
-    public function DisplayProduct($id){
+    public function displayProduct($id){
         try{
             $product = Product::where('id',$id)->firstorFail();
             $productImages = ProductImage::where('product_id',$product->id)->get();
@@ -100,7 +106,7 @@ class ProductController extends Controller
     }
 
     // edit product
-    public function EditProduct($id){
+    public function editProduct($id){
         try{
             $product = Product::where('id',$id)->firstorFail();
             $productImages = ProductImage::where('product_id',$product->id)->get();
@@ -117,7 +123,7 @@ class ProductController extends Controller
     }
 
     // delete product image
-    public function DeleteProductImage(Request $req){
+    public function deleteProductImage(Request $req){
         try{
             ProductImage::where('id',$req->aid)->delete();
         }catch(\Exception $e){
@@ -126,7 +132,7 @@ class ProductController extends Controller
     }
 
     // delete product attributes
-    public function DeleteProductAttr(Request $req){
+    public function deleteProductAttr(Request $req){
         try{
             ProductAttributesAssoc::where('id',$req->atrid)->delete();
         }catch(\Exception $e){
@@ -135,7 +141,7 @@ class ProductController extends Controller
     }
 
     // update product
-    public function UpdateProduct(Request $req){
+    public function updateProduct(Request $req){
         $validate = $req->validate([
             'prodname' => ['required' , 'string' , 'max:100'],
             'subcat' => ['required'],
@@ -156,8 +162,9 @@ class ProductController extends Controller
             ]);
             if($file=$req->file('imgmain')){
                 $fname=$file->getClientOriginalName();
-                    $filename=rand() . "-" . time() . "-" . $fname;
-                    $dest=public_path("/images/product");
+                    $filename = rand() . "-" . time() . "-" . $fname;
+                    $dest = public_path("/images/product");
+                    
                     if($file->move($dest,$filename)){
                         Product::where('id',$req->id)->update([
                             'prod_mainimage' => $filename
@@ -194,7 +201,7 @@ class ProductController extends Controller
     }
 
     // delete product
-    public function DeleteProduct(Request $req){
+    public function deleteProduct(Request $req){
         try{
             Product::where('id',$req->aid)->delete();
         }catch(\Exception $e){

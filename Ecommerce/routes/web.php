@@ -36,69 +36,73 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // user
-Route::get('/adduser',[AdminController::class,'AddUser'])->name('AddUser');
-Route::get('/showuser',[AdminController::class,'ShowUser'])->name('ShowUser');
-Route::post('/postadduser',[AdminController::class,'PostAddUser'])->name('PostAddUser');
-Route::get('/edituser/{id}',[AdminController::class,'EditUser'])->name('EditUser');
-Route::post('/postedituser',[AdminController::class,'PostEditUser'])->name('PostEditUser');
-Route::patch('/deleteuser',[AdminController::class,'DeleteUser'])->name('DeleteUser');
+Route::get('/adduser',[AdminController::class,'addUser'])->name('AddUser');
+Route::get('/showuser',[AdminController::class,'showUser'])->name('ShowUser');
+Route::post('/postadduser',[AdminController::class,'postAddUser'])->name('PostAddUser');
+Route::get('/edituser/{id}',[AdminController::class,'editUser'])->name('EditUser');
+Route::post('/postedituser',[AdminController::class,'postEditUser'])->name('PostEditUser');
+Route::patch('/deleteuser',[AdminController::class,'deleteUser'])->name('DeleteUser');
 
 // Banner
-Route::get('/addbanner',[BannerController::class,'AddBanner'])->name('AddBanner');
-Route::post('/postaddbanner',[BannerController::class,'PostAddBanner'])->name('PostAddBanner');
-Route::get('/showbanner',[BannerController::class,'ShowBanners'])->name('ShowBanner');
-Route::get('/editbanner/{id}',[BannerController::class,'EditBanner'])->name('EditBanner');
-Route::post('/updatebanner',[BannerController::class,'PostUpdateBanner'])->name('PostUpdateBanner');
-Route::patch('/deletebanner',[BannerController::class,'DeleteBanner'])->name('DeleteBanner');
+Route::get('/addbanner',[BannerController::class,'addBanner'])->name('AddBanner');
+Route::post('/postaddbanner',[BannerController::class,'postAddBanner'])->name('PostAddBanner');
+Route::get('/showbanner',[BannerController::class,'showBanners'])->name('ShowBanner');
+Route::get('/editbanner/{id}',[BannerController::class,'editBanner'])->name('EditBanner');
+Route::post('/updatebanner',[BannerController::class,'postUpdateBanner'])->name('PostUpdateBanner');
+Route::patch('/deletebanner',[BannerController::class,'deleteBanner'])->name('DeleteBanner');
 
 // Category
-Route::get('/addcategory',[CategoryController::class,'AddCategory'])->name('AddCategory');
-Route::post('/postaddcategory',[CategoryController::class,'PostAddCategory'])->name('PostAddCategory');
-Route::get('/showcategory',[CategoryController::class,'ShowCategory'])->name('ShowCategory');
-Route::get('/editcategory/{id}',[CategoryController::class,'EditCategory'])->name('EditCategory');
-Route::post('/updatecategory',[CategoryController::class,'UpdateCategory'])->name('UpdateCategory');
-Route::patch('/deletecategory',[CategoryController::class,'DeleteCategory'])->name('DeleteCategory');
+Route::get('/addcategory',[CategoryController::class,'addCategory'])->name('AddCategory');
+Route::post('/postaddcategory',[CategoryController::class,'postAddCategory'])->name('PostAddCategory');
+Route::get('/showcategory',[CategoryController::class,'showCategory'])->name('ShowCategory');
+Route::get('/editcategory/{id}',[CategoryController::class,'editCategory'])->name('EditCategory');
+Route::post('/updatecategory',[CategoryController::class,'updateCategory'])->name('UpdateCategory');
+Route::patch('/deletecategory',[CategoryController::class,'deleteCategory'])->name('DeleteCategory');
 
 // Sub Category
-Route::get('/addsubcategory',[SubCategoryController::class,'AddSubCategory'])->name('AddSubCategory');
-Route::post('/postaddsubcategory',[SubCategoryController::class,'PostAddSubCategory'])->name('PostAddSubCategory');
-Route::get('/showsubcategory',[SubCategoryController::class,'ShowSubCategory'])->name('ShowSubCategory');
-Route::get('/editsubcategory/{id}',[SubCategoryController::class,'EditSubCategory'])->name('EditSubCategory');
-Route::post('/updatesubcategory',[SubCategoryController::class,'PostEditSubCategory'])->name('UpdateSubCategory');
-Route::patch('/deletesubcategory',[SubCategoryController::class,'DeleteSubCategory'])->name('DeleteSubCategory');
+Route::get('/addsubcategory',[SubCategoryController::class,'addSubCategory'])->name('AddSubCategory');
+Route::post('/postaddsubcategory',[SubCategoryController::class,'postaddSubCategory'])->name('PostAddSubCategory');
+Route::get('/showsubcategory',[SubCategoryController::class,'showSubCategory'])->name('ShowSubCategory');
+Route::get('/editsubcategory/{id}',[SubCategoryController::class,'editSubCategory'])->name('EditSubCategory');
+Route::post('/updatesubcategory',[SubCategoryController::class,'postEditSubCategory'])->name('UpdateSubCategory');
+Route::patch('/deletesubcategory',[SubCategoryController::class,'deleteSubCategory'])->name('DeleteSubCategory');
 
 // Product
-Route::get('/addproduct',[ProductController::class,'AddProduct'])->name('AddProduct');
-Route::post('/postaddproduct',[ProductController::class,'PostAddProduct'])->name('PostAddProduct');
-Route::get('/showproduct',[ProductController::class,'ShowProduct'])->name('ShowProduct');
-Route::get('/displayproduct/{id}',[ProductController::class,'DisplayProduct'])->name('DisplayProduct');
-Route::get('/editproduct/{id}',[ProductController::class,'EditProduct'])->name('EditProduct');
-Route::patch('/deleteprodimage',[ProductController::class,'DeleteProductImage'])->name('DeleteProductImage');
-Route::post('/updateproduct',[ProductController::class,'UpdateProduct'])->name('UpdateProduct');
-Route::patch('/deleteattr',[ProductController::class,'DeleteProductAttr'])->name('DeleteProductAttr');
-Route::patch('/deleteproduct',[ProductController::class,'DeleteProduct'])->name('DeleteProduct');
+Route::get('/addproduct',[ProductController::class,'addProduct'])->name('AddProduct');
+Route::post('/postaddproduct',[ProductController::class,'postaddProduct'])->name('PostAddProduct');
+Route::get('/showproduct',[ProductController::class,'showProduct'])->name('ShowProduct');
+Route::get('/displayproduct/{id}',[ProductController::class,'displayProduct'])->name('DisplayProduct');
+Route::get('/editproduct/{id}',[ProductController::class,'editProduct'])->name('EditProduct');
+Route::patch('/deleteprodimage',[ProductController::class,'deleteProductImage'])->name('DeleteProductImage');
+Route::post('/updateproduct',[ProductController::class,'updateProduct'])->name('UpdateProduct');
+Route::patch('/deleteattr',[ProductController::class,'deleteProductAttr'])->name('DeleteProductAttr');
+Route::patch('/deleteproduct',[ProductController::class,'deleteProduct'])->name('DeleteProduct');
 
 // Contact Us
-Route::get('/contactus',[ContactUsController::class,'ContactUs'])->name('ContactUs');
+Route::get('/contactus',[ContactUsController::class,'contactUs'])->name('ContactUs');
 
 // CMS
-Route::get('/cms',[CMSController::class,'AddCMS'])->name('AddCMS');
-Route::post('/addcms',[CMSController::class,'PostAddCMS'])->name('PostAddCMS');
-Route::get('/displaycms',[CMSController::class,'DisplayCMS'])->name('DisplayCMS');
-Route::patch('/deletecms',[CMSController::class,'DeleteCMS'])->name('DeleteCMS');
-Route::get('/editcms/{id}',[CMSController::class,'EditCMS'])->name('EditCMS');
-Route::post('/updatecms',[CMSController::class,'PostEditCMS'])->name('UpdateCMS');
+Route::get('/cms',[CMSController::class,'addCMS'])->name('AddCMS');
+Route::post('/addcms',[CMSController::class,'postAddCMS'])->name('PostAddCMS');
+Route::get('/displaycms',[CMSController::class,'displayCMS'])->name('DisplayCMS');
+Route::patch('/deletecms',[CMSController::class,'deleteCMS'])->name('DeleteCMS');
+Route::get('/editcms/{id}',[CMSController::class,'editCMS'])->name('EditCMS');
+Route::post('/updatecms',[CMSController::class,'postEditCMS'])->name('UpdateCMS');
 
 // Coupon Management
 
-Route::get('/addcoupon',[CouponController::class,'AddCoupon'])->name('AddCoupon');
-Route::post('/addpostcoupon',[CouponController::class,'AddPostCoupon'])->name('PostAddCoupon');
-Route::get('/showcoupons',[CouponController::class,'ShowCoupons'])->name('ShowCoupons');
-Route::patch('/deletecoupon',[CouponController::class,'DeleteCoupon'])->name('DeleteCoupon');
-Route::get('/editcoupon/{id}',[CouponController::class,'EditCoupon'])->name('EditCoupon');
-Route::post('/updatecoupon',[CouponController::class,'EditPostCoupon'])->name('UpdateCoupon');
+Route::get('/addcoupon',[CouponController::class,'addCoupon'])->name('AddCoupon');
+Route::post('/addpostcoupon',[CouponController::class,'addPostCoupon'])->name('PostAddCoupon');
+Route::get('/showcoupons',[CouponController::class,'showCoupons'])->name('ShowCoupons');
+Route::patch('/deletecoupon',[CouponController::class,'deleteCoupon'])->name('DeleteCoupon');
+Route::get('/editcoupon/{id}',[CouponController::class,'editCoupon'])->name('EditCoupon');
+Route::post('/updatecoupon',[CouponController::class,'editPostCoupon'])->name('UpdateCoupon');
 
 // Order 
 Route::get('/order',[OrderController::class,'Orders'])->name('Orders');
-Route::get('/displayorder/{id}',[OrderController::class,'OrdersDetail'])->name('OrdersDetail');
-Route::post('/updatestatus',[OrderController::class,'UpdateStatus'])->name('UpdateStatus');
+Route::get('/displayorder/{id}',[OrderController::class,'ordersDetail'])->name('OrdersDetail');
+Route::post('/updatestatus',[OrderController::class,'updateStatus'])->name('UpdateStatus');
+
+// settings
+Route::get('/usersettings',[AdminController::class,'userSettings'])->name('userSettings');
+Route::post('/updatesettings',[AdminController::class,'updateSettings'])->name('updateSettings');

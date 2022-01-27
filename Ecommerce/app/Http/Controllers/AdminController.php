@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Models\Settings;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,8 +12,13 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 { 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     // Add user page
-    public function AddUser(){
+    public function addUser(){
         $roles = Role::all();
         return view('users.adduser',compact('roles'));
     }
@@ -20,7 +26,7 @@ class AdminController extends Controller
     // show users
     public function showUser(){
         try{
-            $users = User::paginate(5)->except(Auth::id());
+            $users = User::paginate(10)->except(Auth::id());
             $roles = Role::all();
         }
         catch(\Exception $exception){
@@ -31,8 +37,8 @@ class AdminController extends Controller
     }
 
     // add user
-    public function PostAddUser(Request $req){
-        $validateData =$req->validate([
+    public function postAddUser(Request $req){
+        $validateData = $req->validate([
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -59,7 +65,7 @@ class AdminController extends Controller
     }
 
     // display edit user 
-    public function EditUser($id){
+    public function editUser($id){
         try{
             $user = User::where('id',$id)->firstorFail();
             $userrole = Role::where('role_id',$user->role_id)->firstorFail();
@@ -89,8 +95,51 @@ class AdminController extends Controller
     }
 
     // delete user
-    public function DeleteUser(Request $req){
+    public function deleteUser(Request $req){
         User::where('id',$req->aid)->delete();
+        return back();
+    }
+
+    // user settings
+    public function userSettings(){
+        $settings = Settings::first();
+        return view('settings.usersettings',compact('settings'));
+    }
+
+    public function updateSettings(Request $req){
+        if($req->registration == 'on'){
+            Settings::where('id',1)->update([
+                'registration' => 1
+            ]);
+        }
+        else{
+            Settings::where('id',1)->update([
+                'registration' => 0
+            ]);
+        }
+
+        if($req->orders == 'on'){
+            Settings::where('id',1)->update([
+                'order' => 1
+            ]);
+        }
+        else{
+            Settings::where('id',1)->update([
+                'order' => 0
+            ]);
+        }
+
+        if($req->contact == 'on'){
+            Settings::where('id',1)->update([
+                'contact' => 1
+            ]);
+        }
+        else{
+            Settings::where('id',1)->update([
+                'contact' => 0
+            ]);
+        }
+
         return back();
     }
 }

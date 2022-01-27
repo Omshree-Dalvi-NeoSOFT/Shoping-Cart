@@ -8,10 +8,15 @@ use Illuminate\Http\Request;
 
 class SubCategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     // add sub category page
-    public function AddSubCategory(){
+    public function addSubCategory(){
         try{
-            $categories=Category::all();
+            $categories = Category::all();
             return view('subcategory.addsubcategory',compact('categories'));
         }catch(\Exception $e){
             return view('subcategory.subcatnotfound');
@@ -19,7 +24,7 @@ class SubCategoryController extends Controller
     }
 
     // add sub category
-    public function PostAddSubCategory(Request $req){
+    public function postaddSubCategory(Request $req){
         $validation = $req->validate([
             'subcatname' => ['required', 'string'],
             'cattype' => ['required'],
@@ -37,7 +42,7 @@ class SubCategoryController extends Controller
             $subcat->category_id = $category->id;
             $subcat->subcat_description = $req->subcatdescription;
             $subcat->save();
-            if($category->SubCat()->save($subcat)){
+            if($category->subCat()->save($subcat)){
                 return back()->with('status',"Sub-Category Added Successfully !");
             }
             
@@ -45,7 +50,7 @@ class SubCategoryController extends Controller
     }
 
     // display subcategory
-    public function ShowSubCategory(){
+    public function showSubCategory(){
         try{
             $subcats = SubCategory::all();
             $categories = Category::all();
@@ -56,7 +61,7 @@ class SubCategoryController extends Controller
     }
 
     // edit subcategory page
-    public function EditSubCategory($id){
+    public function editSubCategory($id){
         try{
             $subcat = SubCategory::where('id',$id)->firstorFail();
             $category = Category::where('id',$subcat->category_id)->firstorFail();
@@ -68,7 +73,7 @@ class SubCategoryController extends Controller
     }
 
     // update subcategory
-    public function PostEditSubCategory(Request $req){
+    public function postEditSubCategory(Request $req){
         $validation = $req->validate([
             'subcatname' => ['required', 'string'],
             'cattype' => ['required'],
@@ -95,7 +100,7 @@ class SubCategoryController extends Controller
     }
 
     // delete subcategory
-    public function DeleteSubCategory(Request $req){
+    public function deleteSubCategory(Request $req){
         try{
             SubCategory::where('id',$req->aid)->delete();
         }catch(\Exception $exception){

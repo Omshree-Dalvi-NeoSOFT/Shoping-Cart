@@ -7,13 +7,18 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     // add category page
-    public function AddCategory(){
+    public function addCategory(){
         return view('category.addcategory');
     }
 
     // add category
-    public function PostAddCategory(Request $req){
+    public function postAddCategory(Request $req){
         $validate = $req->validate([
             'catname' => ['required','string', 'max:255'],
             'catdescription' => ['max:300']
@@ -37,7 +42,7 @@ class CategoryController extends Controller
     }
 
     // display category
-    public function ShowCategory(){
+    public function showCategory(){
         try{
             $category = Category::paginate(5)->all();
             return view('category.showcategory',compact('category'));   
@@ -47,7 +52,7 @@ class CategoryController extends Controller
     }
 
     // show category detail edit page
-    public function EditCategory($id){
+    public function editCategory($id){
         try {
             $category = Category::where('id', $id)->firstorFail();
             return view('category.editcategory', compact('category'));
@@ -58,7 +63,7 @@ class CategoryController extends Controller
     }
 
     // update category
-    public function UpdateCategory(Request $req){
+    public function updateCategory(Request $req){
         $validate = $req->validate([
             'catname' => ['required','string', 'max:255'],
             'catdescription' => ['max:300']
@@ -81,7 +86,7 @@ class CategoryController extends Controller
     }
 
     // delete category
-    public function DeleteCategory(Request $req){
+    public function deleteCategory(Request $req){
         try{
             Category::where('id',$req->aid)->delete();
         }catch(\Exception $exception){

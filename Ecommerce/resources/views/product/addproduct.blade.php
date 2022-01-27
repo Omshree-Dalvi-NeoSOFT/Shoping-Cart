@@ -2,7 +2,7 @@
 
 @section('content')
 @include('layouts.navbar')
-<div class="content-wrapper p-2">   
+<div class="content-wrapper p-2">
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">{{ __('Add Product') }}</div>
@@ -101,20 +101,20 @@
 
                         <div class="col-md-12 mb-3">
                         <label class="col-md-3 form-label text-md-end">{{ __('Product Attributes ') }} <i class="text text-danger">( optional )</i></label>
-                        <table class="table table-bordered" id="dynamicAddRemove">  
+                        <table class="table table-bordered" id="dynamicAddRemove">
                             <tr>
                             <th>Attribute Name</th>
                             <th>Attribute Value</th>
                             <th>Action</th>
                             </tr>
-                            <tr>  
-                            <td><input type="text" name="attr[0][name]" placeholder="Enter Name" class="form-control @error('attr.*.name') is-invalid @enderror" /></td> 
-                            <td><input type="text" name="attr[0][value]" placeholder="Enter Value" class="form-control @error('attr.*.value') is-invalid @enderror" /></td>  
-                            <td><button type="button" name="add" id="add-btn" class="btn btn-success">Add More</button></td>  
-                            </tr>  
+                            <tr>
+                            <td><input type="text" name="attr[0][name]" placeholder="Enter Name" class="form-control @error('attr.*.name') is-invalid @enderror" /></td>
+                            <td><input type="text" name="attr[0][value]" placeholder="Enter Value" class="form-control @error('attr.*.value') is-invalid @enderror" /></td>
+                            <td><button type="button" name="add" id="add-btn" class="btn btn-success">Add More</button></td>
+                            </tr>
                             </table>
                         </div>
-                        
+
                         <div class="col-md-12 mb-3">
                             <label class="col-md-3 form-label text-md-end">{{ __('Main Product Image')}} <i class="text text-danger">*</i></label>
                             <input type="file" name="imgmain" class="form-control file-upload-info @error('imgmain') is-invalid @enderror" multiple>
@@ -153,12 +153,12 @@
 var i = 0;
 var j = 0;
 $("#add-btn").click(function(){
-++i;
-++j;
-$("#dynamicAddRemove").append('<tr><td><input type="text" name="attr['+i+'][name]" placeholder="Enter Name" class="form-control @error(`attr.*.name`) is-invalid @enderror" /></td><td><input type="text" name="attr['+j+'][value]" placeholder="Enter Value" class="form-control @error(`attr.*.value`) is-invalid @enderror" /></td><td><button type="button" class="btn btn-danger remove-tr">Remove</button></td></tr>');
+    ++i;
+    ++j;
+        $("#dynamicAddRemove").append('<tr><td><input type="text" name="attr['+i+'][name]" placeholder="Enter Name" class="form-control @error(`attr.*.name`) is-invalid @enderror" /></td><td><input type="text" name="attr['+j+'][value]" placeholder="Enter Value" class="form-control @error(`attr.*.value`) is-invalid @enderror" /></td><td><button type="button" class="btn btn-danger remove-tr">Remove</button></td></tr>');
+        });
+    $(document).on('click', '.remove-tr', function(){
+    $(this).parents('tr').remove();
 });
-$(document).on('click', '.remove-tr', function(){  
-$(this).parents('tr').remove();
-});  
 </script>
 @endsection

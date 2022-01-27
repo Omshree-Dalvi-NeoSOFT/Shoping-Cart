@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\RegisterMail;
+use App\Models\NewaLetter;
+use App\Models\Settings;
 
 class UserController extends Controller
 {
@@ -40,7 +42,7 @@ class UserController extends Controller
 
     // login user
     public function login(Request $request){
-        $validator=Validator::make($request->all(),[
+        $validator = Validator::make($request->all(),[
             'email'=>'required',
             'password'=>'required'
         ]);
@@ -48,7 +50,7 @@ class UserController extends Controller
             return response()->json($validator->errors());
         }
         else {
-            if(!$token=auth()->attempt($validator->validated())){
+            if(!$token = auth()->attempt($validator->validated())){
                return response()->json(['err'=>"Unauthorized User !"],401);
             }
             $user = User::where('email',$request->email)->first();
@@ -71,15 +73,27 @@ class UserController extends Controller
                 'role_id' => 5,
                 'status' => 1
             ]);
-            Mail::to($request->uemail)->send(new RegisterMail($request->all()));
-            Mail::to('omshreedalvi31@gmail.com')->send(new AdminRegister($request->all()));
+            $data = ['fname' => $request->ufname,'lname' => $request->ulname,'email' => $request->uemail,'password' => $request->upassword];
+            $user['to'] = $request->uemail;
+            Mail::send('email.register',$data,function($message) use ($user){
+                $message->to($user['to']);
+                $message->subject('Registration Confirmed !');
+            });
+
+            $settings = Settings::first();
+            if($settings->registration == 1){
+                Mail::send('email.adminregister',$data,function($message) use ($user){
+                    $message->to('omshreedalvi98@gmail.com');
+                    $message->subject('New User Registered !');
+                });
+            }
             return response()->json(['msg'=>"User Registered Successfully !"]);
         
     }
 
     // fetch contact us 
     public function contactUs(Request $request){
-        $validator=Validator::make($request->all(),[
+        $validator = Validator::make($request->all(),[
             'name'=>'required',
             'email'=>'required',
             'subject'=>'required',
@@ -90,17 +104,17 @@ class UserController extends Controller
         }
         else{
             $contact = new ContactUs();
-            $contact->name=$request->name;
-            $contact->email=$request->email;
-            $contact->subject=$request->subject;
-            $contact->message=$request->message;
+            $contact->name = $request->name;
+            $contact->email = $request->email;
+            $contact->subject = $request->subject;
+            $contact->message = $request->message;
             $contact->save();
             return response()->json(['msg'=>"we will contact you"]);
         }
     }
 
     // display productdetails
-    public function ProductDetails(){
+    public function productDetails(){
         $product = Product::all();
         $productImage = ProductImage::all();
         $productAttributes = ProductAttributesAssoc::all();
@@ -109,13 +123,13 @@ class UserController extends Controller
     }
 
     // fetch product images
-    public function ProductImages(){
+    public function productImages(){
         $productImage = ProductImage::all();
         return response(['image'=>UserApiResource::collection($productImage)]);
     }
 
     // get bnner details
-    public function BannerDetails(){
+    public function bannerDetails(){
         $banner = Banner::all();
         return response(['banner'=>UserApiResource::collection($banner)]);
     }
@@ -127,13 +141,13 @@ class UserController extends Controller
     }
 
     // get all sub category
-    public function SubCategory(){
+    public function subCategory(){
         $subcategory = SubCategory::all();
         return response(['subcategory'=>UserApiResource::collection($subcategory)]);
     }
 
     // get all products, subcategory wise
-    public function SubCategoryProducts($id){
+    public function subCategoryProducts($id){
         $product = Product::where('subcat_id',$id)->get();
         $productImage = ProductImage::all();
         $productAttributes = ProductAttributesAssoc::all();
@@ -143,22 +157,22 @@ class UserController extends Controller
     }
 
     // get current product details
-    public function CurrentProductsDetails($id){
-        $product = Product::with('Images','ProdAttr')->find($id);
+    public function currentProductsDetails($id){
+        $product = Product::with('Images','prodAttr')->find($id);
         return response()->json($product);
 
     }
 
     // get user profile details
     public function Profile($user){
-        $profile=User::where('email',$user)->first();
+        $profile = User::where('email',$user)->first();
         return response()->json(['profile'=>$profile]);
 
     }
 
     // update user profile
-    public function UpdateProfile(Request $request){
-            $user=User::where('id',$request->id)->update([
+    public function updateProfile(Request $request){
+            $user = User::where('id',$request->id)->update([
                 'firstname' => $request->first_name,
                 'lastname' => $request->last_name,
                 'email' => $request->email
@@ -171,11 +185,11 @@ class UserController extends Controller
     }
 
     // change user password
-    public function ChangePassword(Request $request){
-        $validator=Validator::make($request->all(),[
-            'old_password'=>'required|min:6|max:12',
-            'new_password'=>'required|min:6|max:12',
-            'confirm_password'=>'required|min:6|max:12|same:new_password',
+    public function changePassword(Request $request){
+        $validator = Validator::make($request->all(),[
+            'old_password'=>'required|min:6',
+            'new_password'=>'required|min:6',
+            'confirm_password'=>'required|min:6|same:new_password',
 
         ]);
         if($validator->fails()){
@@ -183,10 +197,20 @@ class UserController extends Controller
         }
         else {
             $user=User::where('email',$request->email)->first();
+
             if(Hash::check($request->old_password,$user->password)){
                $user->update([
                    'password'=>Hash::make($request->new_password)
                ]);
+
+            //    send mail
+               $data = ['fname' => $user->firstname,'lname' => $user->lastname,'email' => $user->email,'password' => $request->new_password];
+                $user['to'] = $request->email;
+                Mail::send('email.updatepassword',$data,function($message) use ($user){
+                    $message->to($user['to']);
+                    $message->subject('Password Changed !');
+                });
+
                return response()->json([
                 'message'=>"password successfully updated",
                 'status'=>1
@@ -244,7 +268,7 @@ class UserController extends Controller
         $orderdetail->grandtotal = $req->grandtotal;
         $orderdetail->finalTotal = $req->finalTotal;
         $orderdetail->status="Pending";
-        // $orderdetail->coupon_id =$req->coupon;
+        
         if($req->coupon){
             $coupon = $req->coupon;
         foreach($coupon as $c){
@@ -252,12 +276,30 @@ class UserController extends Controller
         }
         }
         $orderdetail->save();
-        Mail::to($uemail)->send(new OrderMail($req->all()));
+        
+        // mail of order
+        $data = ['fname' => $req->firstname,'lname' => $req->lastname,'email' => $req->uemail,'password' => $req->upassword, 'address1' => $req->address1, 'zip' => $req->zip,'phone' => $req->phone,'grandtotal' => $req->grandtotal,'finalTotal' => $req->finalTotal];
+        $user['to'] = $uemail;
+        
+        Mail::send('email.order',$data,function($message) use ($user){
+            $message->to($user['to']);
+            $message->subject('Order Placed !');
+        });
+
+        // copy to admin
+        $settings = Settings::first();
+        if($settings->order == 1){
+            Mail::send('email.admincopy',$data,function($message) use ($user){
+                $message->to('omshreedalvi98@gmail.com');
+                $message->subject('New Order Placed !');
+            });
+        }
+        
         return response()->json(['msg'=>"Order Placed Successfully !"]);
     }
 
     // add wish list
-    public function AddWish(Request $req){
+    public function addWish(Request $req){
         $user = User::where('email',$req->email)->first();
         $wish = new WishList();
         $wish->user_id = $user->id;
@@ -267,7 +309,7 @@ class UserController extends Controller
     }
 
     // get user wish list
-    public function GetWish($id){
+    public function getWish($id){
         $wish = WishList::where('user_id',$id)->get();
         foreach($wish as $w){
             $prod = Product::where('id',$w['product_id'])->first();
@@ -277,7 +319,7 @@ class UserController extends Controller
     }
 
     // delete user wishlist 
-    public function DelWish($id){
+    public function delWish($id){
         WishList::where('product_id',$id)->delete();
         return response()->json(["msg"=>"Wish Deleted !!"]);
     }
@@ -289,7 +331,7 @@ class UserController extends Controller
     }
 
     // fetch user orders
-    public function MyOrder($id){
+    public function myOrder($id){
         $userdetail = UserDetails::where('user_id',$id)->get();
         $orderdetail = OrderDetails::all();
         $orders = Order::all();
@@ -305,4 +347,12 @@ class UserController extends Controller
             'expires_in'=>auth()->guard('api')->factory()->getTTL()*60
         ]);
     }    
+
+    // News Letter
+    public function newsLetter(Request $request){
+            $newsltr = new NewaLetter();
+            $newsltr->email=$request->email;
+            $newsltr->save();
+            return response()->json(['msg'=>"we will contact you"]);
+    }
 }

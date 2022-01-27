@@ -1,9 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Mail\OrderMail;
-use App\Mail\OrderUpdateMail;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetails;
@@ -16,6 +13,11 @@ use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     // display all orders
     public function Orders(){
         $orders = Order::all();
@@ -26,7 +28,7 @@ class OrderController extends Controller
     }
 
     // display order in detail
-    public function OrdersDetail($id){
+    public function ordersDetail($id){
         $userdetails = UserDetails::where('id',$id)->first();
         $orderdetails = OrderDetails::where('userdetail_id',$id)->first();
         $orders = Order::where('userdetail_id',$id)->get();
@@ -37,16 +39,20 @@ class OrderController extends Controller
     }
 
     // update status
-    public function UpdateStatus(Request $req){
+    public function updateStatus(Request $req){
         OrderDetails::where('id',$req->orderdtlid)->update([
             'status' => $req->status
         ]);
         $userdetails = UserDetails::where('id',$req->userdtlid)->first();
         $uemail = User::where('id',$userdetails->user_id)->get('email');
         $orderdetails = OrderDetails::where('id',$req->orderdtlid)->first();
-        $data = ['email'=>$userdetails->email,'status'=>$orderdetails->status];
-        Mail::to($uemail)->send(new OrderUpdateMail($data));
-
-        return back()->with('status',"Order Updated !! Mail Send to User");
+       
+        $data = ['fname' => $userdetails->firstname,'lname' => $userdetails->lastname,'email'=>$userdetails->email,'status'=>$orderdetails->status];
+        $user['to'] = $userdetails->email;
+        Mail::send('email.updateorder',$data,function($message) use ($user){
+            $message->to($user['to']);
+            $message->subject('Update on order !');
+        });
+        return back()->with('status',"Order Updated !! Mail Sent to User");
     }
 }

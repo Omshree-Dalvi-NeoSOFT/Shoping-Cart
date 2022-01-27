@@ -9,14 +9,19 @@ use SebastianBergmann\Environment\Console;
 
 class BannerController extends Controller
 {   
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     // show banner page
-    public function AddBanner()
+    public function addBanner()
     {
         return view('banner.addbanner');
     }
 
     // add banner
-    public function PostAddBanner(Request $req)
+    public function postAddBanner(Request $req)
     {
         $validateData = $req->validate([
             'heading' => ['required', 'string', 'max:255'],
@@ -59,7 +64,7 @@ class BannerController extends Controller
     }
 
     // show banner
-    public function ShowBanners()
+    public function showBanners()
     {
         try {
             $banners = Banner::paginate(5)->all();
@@ -70,7 +75,7 @@ class BannerController extends Controller
     }
 
     // edit banner page
-    public function EditBanner($id)
+    public function editBanner($id)
     {
         try {
             $banner = Banner::where('id', $id)->firstorFail();
@@ -81,7 +86,7 @@ class BannerController extends Controller
     }
 
     // update banner
-    public function PostUpdateBanner(Request $req)
+    public function postUpdateBanner(Request $req)
     {
         $validateData = $req->validate([
             'heading' => ['required', 'string', 'max:255'],
@@ -127,14 +132,16 @@ class BannerController extends Controller
     }
 
     // delete banner
-    public function DeleteBanner(Request $req){
+    public function deleteBanner(Request $req){
         try{
-            $banner=Banner::where('id',$req->aid)->firstorFail();
-            $destination=public_path('images/banner/'.$banner->banner_image);
+            $banner = Banner::where('id',$req->aid)->firstorFail();
+            $destination = public_path('images/banner/'.$banner->banner_image);
+
             if(File::exists($destination)){
                 unlink($destination);
                 $banner->delete();
             }
+             
         }catch(\Exception $exception){
             return view('banner.bannernotfound');
         }

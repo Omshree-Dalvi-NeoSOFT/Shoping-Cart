@@ -7,8 +7,13 @@ use Illuminate\Http\Request;
 
 class ContactUsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     // display contact page
-    public function ContactUs(){
+    public function contactUs(){
         try{
             $contacts = ContactUs::paginate(5)->all();
             return view('contact.showcontact',compact('contacts'));
